@@ -13,10 +13,10 @@
   --border-color: #e2e8f0;
   --text-main: #1e293b;
   --text-muted: #64748b;
-  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
-    0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.07),
-    0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-sm:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-md:
+    0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
   --radius-xl: 1.5rem;
   --radius-lg: 1rem;
 }
@@ -275,4 +275,198 @@ input[type="range"]::-webkit-slider-thumb {
 ::selection {
   background: var(--primary);
   color: white;
+}
+
+/* ===== Onboarding Guide ===== */
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.4s ease;
+  pointer-events: none;
+}
+
+.onboarding-overlay.visible {
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: all;
+}
+
+.onboarding-spotlight {
+  position: absolute;
+  border-radius: 1.5rem;
+  box-shadow:
+    0 0 0 9999px rgba(0, 0, 0, 0.55),
+    0 0 30px 4px rgba(10, 89, 172, 0.25);
+  background: transparent;
+  z-index: 10000;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+@keyframes spotlight-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 9999px rgba(0, 0, 0, 0.55),
+      0 0 30px 4px rgba(10, 89, 172, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 9999px rgba(0, 0, 0, 0.55),
+      0 0 40px 8px rgba(10, 89, 172, 0.35);
+  }
+}
+
+.onboarding-overlay.visible .onboarding-spotlight {
+  animation: spotlight-pulse 2.5s ease-in-out infinite;
+}
+
+.onboarding-tooltip {
+  z-index: 10001;
+  background: #fff;
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  box-shadow:
+    0 25px 60px -12px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(10, 89, 172, 0.08);
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.onboarding-tooltip.transitioning {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.onboarding-step-badge {
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #0a59ac;
+  background: rgba(10, 89, 172, 0.08);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.onboarding-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 0.5rem;
+  line-height: 1.4;
+}
+
+.onboarding-desc {
+  font-size: 0.825rem;
+  color: #64748b;
+  line-height: 1.65;
+  margin: 0 0 1.5rem;
+  font-weight: 500;
+}
+
+.onboarding-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.onboarding-actions-left {
+  display: flex;
+  align-items: center;
+}
+
+.onboarding-btn-primary {
+  padding: 0.65rem 1.5rem;
+  background: #0a59ac;
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(10, 89, 172, 0.3);
+}
+
+.onboarding-btn-primary:hover {
+  background: #084a91;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(10, 89, 172, 0.35);
+}
+
+.onboarding-btn-secondary {
+  padding: 0.65rem 1.25rem;
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.onboarding-btn-secondary:hover {
+  border-color: #0a59ac;
+  color: #0a59ac;
+  background: rgba(10, 89, 172, 0.04);
+}
+
+.onboarding-btn-skip {
+  padding: 0.65rem 1.25rem;
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.onboarding-btn-skip:hover {
+  color: #64748b;
+}
+
+.onboarding-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.onboarding-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.onboarding-dot.active {
+  background: #0a59ac;
+  width: 20px;
+  border-radius: 4px;
+}
+
+@media (max-width: 1023px) {
+  .onboarding-tooltip {
+    padding: 1.25rem;
+    max-width: calc(100vw - 32px) !important;
+  }
+  .onboarding-title {
+    font-size: 1rem;
+  }
+  .onboarding-desc {
+    font-size: 0.775rem;
+  }
 }

@@ -27,8 +27,8 @@ export const DEFAULT_ROOF_COEFFS: Record<RoofType, number> = {
 export const PACKAGE_PRICES: Record<PackageTier, number> = {
   [PackageTier.ROUGH]: 3500000,
   [PackageTier.BASIC]: 5500000,
-  [PackageTier.STANDARD]: 6000000,
-  [PackageTier.PREMIUM]: 6500000,
+  [PackageTier.STANDARD]: 6500000,
+  [PackageTier.PREMIUM]: 8000000,
   [PackageTier.CUSTOM]: 0
 };
 

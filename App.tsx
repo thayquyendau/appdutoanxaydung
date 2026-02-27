@@ -11,9 +11,20 @@ import {
 import { LABELS, DEFAULT_FOUNDATION_COEFFS, DEFAULT_BASEMENT_COEFFS, DEFAULT_ROOF_COEFFS, PACKAGE_PRICES } from './constants';
 import { calculateEstimate, formatCurrency, formatArea } from './services/calculationService';
 import Select from './components/Select';
+import OnboardingGuide from './components/OnboardingGuide';
 
 const App: React.FC = () => {
   const [isDark, setIsDark] = useState(false);
+
+  // Onboarding guide for first-time users
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    return !localStorage.getItem('onboarding_completed');
+  });
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('onboarding_completed', 'true');
+    setShowOnboarding(false);
+  };
 
   // State for prices of each tier
   const [tierPrices, setTierPrices] = useState<Record<PackageTier, number>>({
@@ -22,18 +33,18 @@ const App: React.FC = () => {
   });
 
   const [inputs, setInputs] = useState<CalculationInputs>({
-    width: 5,
-    length: 15,
-    foundation: FoundationType.SINGLE,
-    foundationCoeff: DEFAULT_FOUNDATION_COEFFS[FoundationType.SINGLE],
+    width: 0,
+    length: 0,
+    foundation: FoundationType.NONE,
+    foundationCoeff: 0,
     basement: BasementType.NONE,
     basementCoeff: 0,
-    numFloors: 2,
+    numFloors: 0,
     floorCoeff: 100,
     hasTerrace: false,
     terraceCoeff: 50,
-    roof: RoofType.CONCRETE,
-    roofCoeff: DEFAULT_ROOF_COEFFS[RoofType.CONCRETE],
+    roof: RoofType.NONE,
+    roofCoeff: 0,
     packageTier: PackageTier.STANDARD,
     customUnitPrice: 6000000,
   });
@@ -103,6 +114,7 @@ const App: React.FC = () => {
 
   return (
     <div className="main-container px-4 py-8 md:px-6 lg:px-8">
+      {showOnboarding && <OnboardingGuide onComplete={handleOnboardingComplete} />}
       {/* Header with Theme Toggle -- tạm ẩn */}
       {/* <div className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-3">
@@ -145,10 +157,10 @@ const App: React.FC = () => {
                 <label className="label !mb-0">Số tầng (bao gồm trệt)</label>
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] font-bold text-[#0a59ac] uppercase">Hệ số: 100%</span>
-                  <span className="text-xl font-black text-[#0a59ac]">{inputs.numFloors}</span>
+                  <span className="text-xl font-black text-[#0a59ac]">{inputs.numFloors || '–'}</span>
                 </div>
               </div>
-              <input name="numFloors" type="range" min="1" max="10" step="1" value={inputs.numFloors} onChange={handleInputChange} className="accent-[#0a59ac]" />
+              <input name="numFloors" type="range" min="0" max="10" step="1" value={inputs.numFloors} onChange={handleInputChange} className="accent-[#0a59ac]" />
             </div>
 
             <div className="input-group">
@@ -229,6 +241,14 @@ const App: React.FC = () => {
               <span>Bảng Dự Toán Chi Phí</span>
             </div>
 
+            {/* AI Disclaimer Note */}
+            <div className="flex items-start gap-2.5 p-3.5 mb-4 rounded-xl bg-amber-50 border border-amber-200/60">
+              <svg className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <p className="text-[11px] text-amber-700 font-semibold leading-relaxed">
+                Đơn giá hiển thị là <strong>giá thầu trung bình</strong> được tổng hợp từ nguồn AI. Bạn có thể <strong>chỉnh sửa đơn giá</strong> theo thực tế bằng cách bấm vào nút <strong>✏️ Sửa</strong> trên mỗi gói.
+              </p>
+            </div>
+
             {/* Quick Package Selectors - Now with 4 cards and editable prices */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
               {[PackageTier.BASIC, PackageTier.STANDARD, PackageTier.PREMIUM, PackageTier.ROUGH].map(tier => (
@@ -252,6 +272,18 @@ const App: React.FC = () => {
                       className={`w-full bg-transparent border-b border-dashed border-slate-200 text-[10px] font-bold outline-none focus:border-[#0a59ac] ${inputs.packageTier === tier ? 'text-[#0a59ac] dark:text-[#0a59ac]' : 'text-[#0a59ac]'}`}
                     />
                     <span className="text-[8px] font-bold text-slate-400 uppercase shrink-0">đ/m²</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const priceInput = e.currentTarget.parentElement?.querySelector('input');
+                        priceInput?.focus();
+                        priceInput?.select();
+                      }}
+                      className="ml-1 p-1 rounded-md hover:bg-slate-100 transition-colors shrink-0 group/edit"
+                      title="Chỉnh sửa đơn giá"
+                    >
+                      <svg className="w-3.5 h-3.5 text-slate-400 group-hover/edit:text-[#0a59ac] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    </button>
                   </div>
                 </div>
               ))}
