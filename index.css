@@ -288,17 +288,17 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .onboarding-overlay.visible {
-  background: rgba(0, 0, 0, 0.3);
+  background: transparent;
   pointer-events: all;
 }
 
 .onboarding-spotlight {
-  position: absolute;
+  position: fixed;
   border-radius: 1.5rem;
   box-shadow:
     0 0 0 9999px rgba(0, 0, 0, 0.3),
     0 0 30px 4px rgba(10, 89, 172, 0.15);
-  background: transparent;
+  background: rgba(255, 255, 255, 0.15);
   z-index: 10000;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;

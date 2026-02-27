@@ -245,7 +245,7 @@ const App: React.FC = () => {
             <div className="flex items-start gap-2.5 p-3.5 mb-4 rounded-xl bg-amber-50 border border-amber-200/60">
               <svg className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <p className="text-[11px] text-amber-700 font-semibold leading-relaxed">
-                Đơn giá hiển thị là <strong>giá thầu trung bình</strong> được tổng hợp từ nguồn AI. Bạn có thể <strong>chỉnh sửa đơn giá</strong> theo thực tế bằng cách bấm vào nút <strong>✏️ Sửa</strong> trên mỗi gói.
+                Đơn giá hiển thị là <strong>giá thầu trung bình</strong> được AI tổng hợp và cập nhật liên tục. Bạn có thể <strong>chỉnh sửa đơn giá</strong> theo thực tế và cách tính chi phí này chỉ mang tính chất khái toán, thực tế có thể phát sinh thêm chi phí.
               </p>
             </div>
 

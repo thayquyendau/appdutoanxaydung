@@ -56,13 +56,18 @@ const OnboardingGuide: React.FC<OnboardingGuideProps> = ({ onComplete }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Update spotlight when step changes
+  // Update spotlight when step changes — with delay on first render for layout to settle
   useEffect(() => {
-    updateSpotlight();
+    const delay = setTimeout(() => {
+      requestAnimationFrame(() => {
+        updateSpotlight();
+      });
+    }, 100);
     const handleResize = () => updateSpotlight();
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleResize);
     return () => {
+      clearTimeout(delay);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleResize);
     };
