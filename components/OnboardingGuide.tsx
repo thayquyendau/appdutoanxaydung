@@ -41,7 +41,7 @@ const OnboardingGuide: React.FC<OnboardingGuideProps> = ({ onComplete }) => {
       const rect = target.getBoundingClientRect();
       const padding = 12;
       setSpotlight({
-        top: rect.top - padding + window.scrollY,
+        top: rect.top - padding,
         left: rect.left - padding,
         width: rect.width + padding * 2,
         height: rect.height + padding * 2,
@@ -49,8 +49,9 @@ const OnboardingGuide: React.FC<OnboardingGuideProps> = ({ onComplete }) => {
     }
   };
 
-  // Initial mount animation
+  // Initial mount: scroll to top and animate in
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     const timer = setTimeout(() => setIsVisible(true), 50);
     return () => clearTimeout(timer);
   }, []);
@@ -96,16 +97,15 @@ const OnboardingGuide: React.FC<OnboardingGuideProps> = ({ onComplete }) => {
 
   const currentStep = STEPS[step];
 
-  // Calculate tooltip position
+  // Calculate tooltip position (fixed, viewport-relative)
   const getTooltipStyle = (): React.CSSProperties => {
     if (!spotlight) return { opacity: 0 };
 
     const isMobile = window.innerWidth < 1024;
 
     if (isMobile) {
-      // On mobile: position below the spotlight
       return {
-        position: 'absolute',
+        position: 'fixed',
         top: spotlight.top + spotlight.height + 16,
         left: '50%',
         transform: 'translateX(-50%)',
@@ -115,14 +115,14 @@ const OnboardingGuide: React.FC<OnboardingGuideProps> = ({ onComplete }) => {
 
     if (currentStep.tooltipPosition === 'right') {
       return {
-        position: 'absolute',
+        position: 'fixed',
         top: spotlight.top + 40,
         left: spotlight.left + spotlight.width + 20,
         maxWidth: '360px',
       };
     } else {
       return {
-        position: 'absolute',
+        position: 'fixed',
         top: spotlight.top + 40,
         right: window.innerWidth - spotlight.left + 20,
         maxWidth: '360px',
